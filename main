@@ -1,0 +1,49 @@
+import random
+
+# in english https://youtu.be/iSNsgj1OCLA - The Riddle That Seems Impossible Even If You Know The Answer
+# in russian https://youtu.be/wWQ9YdreY9c - Разгадка, в которую невозможно поверить: задача о 100 заключённых [Veritasium]
+
+def box():
+    # fill 100 boxes with random unique numbers in range of 100
+    boxes: list[int] = []
+    for x in range(100):
+        flag = False
+        while not flag:
+            y = random.randint(0, 99)
+            if y not in boxes:
+                boxes.append(y)
+                flag = True
+    return boxes
+
+def one_turn():
+    # main function of 1 turn is 1000 tries of the riddle (100 prisoners choose their boxes by prisoners numbers)
+    result: list[int] = []
+    for example in range(1000): # 1000 times riddle
+        flag_fail = 0
+        boxes1 : list[int] = box()
+        ###print([x for x in range(100)])
+        ###print(boxes1)
+        for x in range(100): # 1 time riddle
+            number, steps = x, x
+            for y in range(50):
+               ###print(y, ": ", number, " step = ", steps)
+               flag_fail = True
+               if number == boxes1[steps]:
+                   flag_fail = False
+                   break
+               else:
+                   steps = boxes1[steps]
+            if flag_fail == True:
+                result.append(1)
+                break
+            else:
+               result.append(0)
+    return sum(result)
+
+if __name__ == '__main__':
+    b, a = [], 0
+    for x in range(1000):
+        a = one_turn()
+        print(a)
+        b.append(a)
+    print(sum(b)/1000)
